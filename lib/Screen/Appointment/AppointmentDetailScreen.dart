@@ -13,13 +13,13 @@ class AppointmentDetailScreen extends StatefulWidget {
   });
 
   @override
-  State<AppointmentDetailScreen> createState() => _AppointmentDetailScreenState();
+  State<AppointmentDetailScreen> createState() =>
+      _AppointmentDetailScreenState();
 }
 
 class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
   late List<Appointment> appointments;
   final Map<String, bool> _expandedCategories = {};
-
 
   @override
   void initState() {
@@ -33,14 +33,21 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
       final name = items[i].serviceType;
       String category = 'Others';
 
-      if (name.contains("iPhone") || name.contains("Samsung") || name.contains("Xiaomi") ||
-          name.contains("Google") || name.contains("Sony") || name.contains("Oppo") ||
-          name.contains("Realme") || name.contains("ASUS")) {
+      if (name.contains("iPhone") ||
+          name.contains("Samsung") ||
+          name.contains("Xiaomi") ||
+          name.contains("Google") ||
+          name.contains("Sony") ||
+          name.contains("Oppo") ||
+          name.contains("Realme") ||
+          name.contains("ASUS")) {
         category = 'Phone';
       } else if (name.contains("iPad")) {
         category = 'IPad';
-      } else if (name.contains("MacBook") || name.contains("Lenovo") ||
-          name.contains("Dell") || name.contains("HP")) {
+      } else if (name.contains("MacBook") ||
+          name.contains("Lenovo") ||
+          name.contains("Dell") ||
+          name.contains("HP")) {
         category = 'Laptop';
       } else if (name.contains("iMac")) {
         category = 'Desktop';
@@ -54,11 +61,16 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
 
   String _getCategoryIcon(String category) {
     switch (category) {
-      case 'Phone': return '📱';
-      case 'IPad': return '📲';
-      case 'Laptop': return '💻';
-      case 'Desktop': return '🖥️';
-      default: return '📦';
+      case 'Phone':
+        return '📱';
+      case 'IPad':
+        return '📲';
+      case 'Laptop':
+        return '💻';
+      case 'Desktop':
+        return '🖥️';
+      default:
+        return '📦';
     }
   }
 
@@ -66,60 +78,67 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
   Widget build(BuildContext context) {
     final groupedAppointments = _groupAppointmentsByCategory(appointments);
 
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Appointment Details'),
         backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white,
       ),
-      body: appointments.isEmpty
-          ? const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.calendar_today, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
-            Text(
-              'No appointments found',
-              style: TextStyle(fontSize: 18, color: Colors.grey),
-            ),
-          ],
-        ),
-      )
-          : ListView.builder(
-        itemCount: groupedAppointments.length,
-        itemBuilder: (context, groupIndex) {
-          String category = groupedAppointments.keys.elementAt(groupIndex);
-          List<int> appointmentIndices = groupedAppointments[category]!;
-          final isExpanded = _expandedCategories[category] ?? true;
+      body:
+          appointments.isEmpty
+              ? const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.calendar_today, size: 64, color: Colors.grey),
+                    SizedBox(height: 16),
+                    Text(
+                      'No appointments found',
+                      style: TextStyle(fontSize: 18, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              )
+              : ListView.builder(
+                itemCount: groupedAppointments.length,
+                itemBuilder: (context, groupIndex) {
+                  String category = groupedAppointments.keys.elementAt(
+                    groupIndex,
+                  );
+                  List<int> appointmentIndices = groupedAppointments[category]!;
+                  final isExpanded = _expandedCategories[category] ?? true;
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ListTile(
-                tileColor: Colors.grey.shade300,
-                title: Text(
-                  '${_getCategoryIcon(category)} $category (${appointmentIndices.length})',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                trailing: IconButton(
-                  icon: Icon(isExpanded ? Icons.expand_less : Icons.expand_more),
-                  onPressed: () {
-                    setState(() {
-                      _expandedCategories[category] = !isExpanded;
-                    });
-                  },
-                ),
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        tileColor:
+                            isDark ? Colors.grey[800] : Colors.grey.shade300,
+                        title: Text(
+                          '${_getCategoryIcon(category)} $category (${appointmentIndices.length})',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        trailing: IconButton(
+                          icon: Icon(
+                            isExpanded ? Icons.expand_less : Icons.expand_more,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _expandedCategories[category] = !isExpanded;
+                            });
+                          },
+                        ),
+                      ),
+                      if (isExpanded)
+                        ...appointmentIndices.map((index) {
+                          final appointment = appointments[index];
+                          return _buildAppointmentCard(appointment);
+                        }),
+                    ],
+                  );
+                },
               ),
-              if (isExpanded)
-                ...appointmentIndices.map((index) {
-                  final appointment = appointments[index];
-                  return _buildAppointmentCard(appointment);
-                }),
-            ],
-          );
-        },
-      ),
     );
   }
 
@@ -127,9 +146,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
     return Card(
       elevation: 4,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -190,12 +207,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
       children: [
         Icon(icon, size: 20, color: Colors.grey),
         const SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            text,
-            style: const TextStyle(fontSize: 16),
-          ),
-        ),
+        Expanded(child: Text(text, style: const TextStyle(fontSize: 16))),
       ],
     );
   }
@@ -207,10 +219,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
         Container(
           width: 16,
           height: 16,
-          decoration: BoxDecoration(
-            color: statusColor,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: statusColor, shape: BoxShape.circle),
         ),
         const SizedBox(width: 8),
         Text(
@@ -239,19 +248,25 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
               if (loadingProgress == null) return child;
               return Center(
                 child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                      loadingProgress.expectedTotalBytes!
-                      : null,
+                  value:
+                      loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
                 ),
               );
             },
-            errorBuilder: (context, error, stackTrace) => Container(
-              color: Colors.grey[200],
-              child: const Center(
-                child: Icon(Icons.broken_image, size: 50, color: Colors.grey),
-              ),
-            ),
+            errorBuilder:
+                (context, error, stackTrace) => Container(
+                  color: Colors.grey[200],
+                  child: const Center(
+                    child: Icon(
+                      Icons.broken_image,
+                      size: 50,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
           ),
         ),
       ),
@@ -275,28 +290,29 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => Scaffold(
-          backgroundColor: Colors.black,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ),
-          body: Center(
-            child: InteractiveViewer(
-              panEnabled: true,
-              minScale: 0.5,
-              maxScale: 4.0,
-              child: Hero(
-                tag: 'appointment-image-$imageUrl',
-                child: Image.network(imageUrl),
+        builder:
+            (context) => Scaffold(
+              backgroundColor: Colors.black,
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+              body: Center(
+                child: InteractiveViewer(
+                  panEnabled: true,
+                  minScale: 0.5,
+                  maxScale: 4.0,
+                  child: Hero(
+                    tag: 'appointment-image-$imageUrl',
+                    child: Image.network(imageUrl),
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
       ),
     );
   }
@@ -304,30 +320,33 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
   void _showDeleteConfirmation(int appointmentId) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Confirm Deletion'),
-        content: const Text('Are you sure you want to delete this appointment?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Confirm Deletion'),
+            content: const Text(
+              'Are you sure you want to delete this appointment?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  _removeAppointment(appointmentId);
+                  widget.onRemove(appointmentId);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Appointment deleted successfully'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                },
+                child: const Text('OK'),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _removeAppointment(appointmentId);
-              widget.onRemove(appointmentId);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Appointment deleted successfully'),
-                  backgroundColor: Colors.red,
-                ),
-              );
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      ),
     );
   }
 

@@ -1,4 +1,6 @@
+import 'package:customer_system/Screen/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Model/appointment.dart';
 import '../../Model/product.dart';
@@ -261,6 +263,22 @@ class _HomeScreenState extends State<HomeScreen>
                 );
               },
             ),
+            Consumer<ThemeProvider>(
+              builder: (context, themeProvider, child) {
+                return SwitchListTile(
+                  secondary: const Icon(
+                    Icons.brightness_6,
+                    color: Colors.deepPurple,
+                  ),
+                  title: const Text('Dark Mode'),
+                  value: themeProvider.isDarkMode,
+                  onChanged: (value) {
+                    themeProvider.toggleTheme(value);
+                  },
+                );
+              },
+            ),
+
             ListTile(
               leading: const Icon(Icons.logout, color: Colors.deepPurple),
               title: const Text('Logout'),
@@ -348,11 +366,15 @@ class _HomeScreenState extends State<HomeScreen>
                     ['All', 'Phone', 'IPad', 'Laptop', 'Desktop'].map((
                       category,
                     ) {
+                      final isSelected = _selectedCategory == category;
+                      final isDark =
+                          Theme.of(context).brightness == Brightness.dark;
+
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4),
                         child: ChoiceChip(
                           label: Text(category),
-                          selected: _selectedCategory == category,
+                          selected: isSelected,
                           onSelected: (selected) {
                             if (selected) {
                               setState(() {
@@ -362,10 +384,14 @@ class _HomeScreenState extends State<HomeScreen>
                           },
                           checkmarkColor: Colors.white,
                           selectedColor: Colors.deepPurple,
+                          backgroundColor:
+                              isDark ? Colors.grey[800] : Colors.grey[200],
                           labelStyle: TextStyle(
                             color:
-                                _selectedCategory == category
+                                isSelected
                                     ? Colors.white
+                                    : isDark
+                                    ? Colors.white70
                                     : Colors.black,
                           ),
                         ),
@@ -374,6 +400,7 @@ class _HomeScreenState extends State<HomeScreen>
               ),
             ),
           ),
+
           Expanded(
             child: FadeTransition(
               opacity: _fadeAnimation,

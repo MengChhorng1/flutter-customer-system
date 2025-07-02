@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (_) => const HomeScreen()),
-              (route) => false,
+          (route) => false,
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: 400,
                   height: 200,
                   child: Lottie.network(
-                    "https://lottie.host/5d6bbd26-3360-46ec-a607-825e10d6a7b9/xcXq6lWza0.json",
+                    "https://lottie.host/9e1338a0-2f78-4151-8de3-8ca3f2bcd93e/T1S4sU09ja.json",
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -152,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed:
                           () => setState(
                             () => _obscurePassword = !_obscurePassword,
-                      ),
+                          ),
                     ),
                   ),
                 ),
@@ -169,28 +169,28 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     child:
-                    _isLoading
-                        ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
-                        : const Text(
-                      'Login',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    ),
+                        _isLoading
+                            ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                            : const Text(
+                              'Login',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
                   ),
                 ),
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed:
                       () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const RegisterScreen(),
-                    ),
-                  ),
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const RegisterScreen(),
+                        ),
+                      ),
                   child: const Text.rich(
                     TextSpan(
                       text: "Don't have an account? ",

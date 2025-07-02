@@ -59,113 +59,118 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFF6A11CB),
       body: Center(
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          constraints: const BoxConstraints(maxWidth: 350),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.95),
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.15),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Register",
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.deepPurple,
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            constraints: const BoxConstraints(maxWidth: 350),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.95),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.15),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
                 ),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                "Signup now and get full access to our app.",
-                style: TextStyle(fontSize: 14.5, color: Colors.black54),
-              ),
-              const SizedBox(height: 16),
-              buildInput(controller: fullNameController, label: 'Full Name'),
-              const SizedBox(height: 10),
-              buildInput(
-                controller: emailController,
-                label: 'Email',
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const SizedBox(height: 10),
-              buildInput(
-                controller: phoneController,
-                label: 'Phone Number',
-                keyboardType: TextInputType.phone,
-              ),
-              const SizedBox(height: 10),
-              buildInput(
-                controller: passwordController,
-                label: 'Password',
-                obscureText: _obscurePassword,
-                toggleVisibility:
-                    () => setState(() => _obscurePassword = !_obscurePassword),
-                isObscured: _obscurePassword,
-              ),
-              const SizedBox(height: 10),
-              buildInput(
-                controller: confirmPasswordController,
-                label: 'Confirm Password',
-                obscureText: _obscureConfirm,
-                toggleVisibility:
-                    () => setState(() => _obscureConfirm = !_obscureConfirm),
-                isObscured: _obscureConfirm,
-              ),
-              const SizedBox(height: 15),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Register",
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurple,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  "Signup now and get full access to our app.",
+                  style: TextStyle(fontSize: 14.5, color: Colors.black54),
+                ),
+                const SizedBox(height: 16),
+                buildInput(controller: fullNameController, label: 'Full Name'),
+                const SizedBox(height: 10),
+                buildInput(
+                  controller: emailController,
+                  label: 'Email',
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 10),
+                buildInput(
+                  controller: phoneController,
+                  label: 'Phone Number',
+                  keyboardType: TextInputType.phone,
+                ),
+                const SizedBox(height: 10),
+                buildInput(
+                  controller: passwordController,
+                  label: 'Password',
+                  obscureText: _obscurePassword,
+                  toggleVisibility:
+                      () =>
+                          setState(() => _obscurePassword = !_obscurePassword),
+                  isObscured: _obscurePassword,
+                ),
+                const SizedBox(height: 10),
+                buildInput(
+                  controller: confirmPasswordController,
+                  label: 'Confirm Password',
+                  obscureText: _obscureConfirm,
+                  toggleVisibility:
+                      () => setState(() => _obscureConfirm = !_obscureConfirm),
+                  isObscured: _obscureConfirm,
+                ),
+                const SizedBox(height: 15),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.deepPurple,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: register,
+                    child: const Text(
+                      "Register",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
-                  onPressed: register,
-                  child: const Text(
-                    "Register",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Center(
-                child: TextButton(
-                  onPressed:
-                      () => Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (_) => const LoginScreen()),
-                      ),
-                  child: const Text.rich(
-                    TextSpan(
-                      text: "Already have an account? ",
-                      style: TextStyle(fontSize: 14.5, color: Colors.black54),
-                      children: [
-                        TextSpan(
-                          text: "Login",
-                          style: TextStyle(
-                            color: Colors.deepPurple,
-                            decoration: TextDecoration.underline,
+                const SizedBox(height: 10),
+                Center(
+                  child: TextButton(
+                    onPressed:
+                        () => Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const LoginScreen(),
                           ),
                         ),
-                      ],
+                    child: const Text.rich(
+                      TextSpan(
+                        text: "Already have an account? ",
+                        style: TextStyle(fontSize: 14.5, color: Colors.black54),
+                        children: [
+                          TextSpan(
+                            text: "Login",
+                            style: TextStyle(
+                              color: Colors.deepPurple,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

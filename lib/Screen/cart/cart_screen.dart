@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Model/cart.dart';
 import '../../providers/cart_provider.dart';
-import '../../Model/product.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -172,6 +171,7 @@ class _CartScreenState extends State<CartScreen> {
       (sum, index) => sum + cart.items[index].totalPrice,
     );
     final groupedItems = _groupCartItemsByCategory(cart.items);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
@@ -232,14 +232,14 @@ class _CartScreenState extends State<CartScreen> {
                 itemBuilder: (context, groupIndex) {
                   String category = groupedItems.keys.elementAt(groupIndex);
                   List<int> itemIndices = groupedItems[category]!;
-
                   final isExpanded = _expandedCategories[category] ?? true;
 
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ListTile(
-                        tileColor: Colors.grey.shade300,
+                        tileColor:
+                            isDark ? Colors.grey[800] : Colors.grey.shade300,
                         title: Text(
                           '${_getCategoryIcon(category)} $category (${itemIndices.length})',
                           style: const TextStyle(fontWeight: FontWeight.bold),
@@ -258,10 +258,11 @@ class _CartScreenState extends State<CartScreen> {
                       if (isExpanded)
                         ...itemIndices.map((index) {
                           final item = cart.items[index];
+                          final isSelected = _selectedIndices.contains(index);
                           return GestureDetector(
                             onTap: () {
                               setState(() {
-                                if (_selectedIndices.contains(index)) {
+                                if (isSelected) {
                                   _selectedIndices.remove(index);
                                 } else {
                                   _selectedIndices.add(index);
@@ -274,20 +275,18 @@ class _CartScreenState extends State<CartScreen> {
                                 vertical: 4,
                               ),
                               color:
-                                  _selectedIndices.contains(index)
-                                      ? Colors.blue.shade50
-                                      : Colors.white,
+                                  isSelected
+                                      ? Colors.deepPurple.withOpacity(0.2)
+                                      : Theme.of(context).cardColor,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   children: [
                                     Checkbox(
-                                      value: _selectedIndices.contains(index),
+                                      value: isSelected,
                                       onChanged: (_) {
                                         setState(() {
-                                          if (_selectedIndices.contains(
-                                            index,
-                                          )) {
+                                          if (isSelected) {
                                             _selectedIndices.remove(index);
                                           } else {
                                             _selectedIndices.add(index);
@@ -306,14 +305,11 @@ class _CartScreenState extends State<CartScreen> {
                                                 height: 60,
                                                 fit: BoxFit.cover,
                                                 errorBuilder:
-                                                    (
-                                                      context,
-                                                      error,
-                                                      stackTrace,
-                                                    ) => const Icon(
-                                                      Icons.broken_image,
-                                                      size: 60,
-                                                    ),
+                                                    (context, error, _) =>
+                                                        const Icon(
+                                                          Icons.broken_image,
+                                                          size: 60,
+                                                        ),
                                               )
                                               : const Icon(
                                                 Icons.shopping_cart,
@@ -337,7 +333,10 @@ class _CartScreenState extends State<CartScreen> {
                                           Text(
                                             '\$${item.product.price.toStringAsFixed(2)} each',
                                             style: TextStyle(
-                                              color: Colors.grey.shade600,
+                                              color:
+                                                  Theme.of(
+                                                    context,
+                                                  ).textTheme.bodySmall?.color,
                                             ),
                                           ),
                                           const SizedBox(height: 8),
@@ -409,8 +408,10 @@ class _CartScreenState extends State<CartScreen> {
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.grey[100],
-          border: Border(top: BorderSide(color: Colors.grey[300]!)),
+          color: Theme.of(context).bottomAppBarTheme.color,
+          border: Border(
+            top: BorderSide(color: Theme.of(context).dividerColor),
+          ),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

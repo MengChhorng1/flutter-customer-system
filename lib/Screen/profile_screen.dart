@@ -50,12 +50,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       tag: 'profile-image-hero',
                       child: Image.network(
                         imageUrl,
-                        errorBuilder: (context, error, stackTrace) => Container(
-                          color: Colors.grey[200],
-                          child: const Center(
-                            child: Icon(Icons.broken_image, size: 50, color: Colors.white),
-                          ),
-                        ),
+                        errorBuilder:
+                            (context, error, stackTrace) => Container(
+                              color: Colors.grey[200],
+                              child: const Center(
+                                child: Icon(
+                                  Icons.broken_image,
+                                  size: 50,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
                       ),
                     ),
                   ),
@@ -64,7 +69,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   top: 20,
                   right: 20,
                   child: IconButton(
-                    icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 30,
+                    ),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ),
@@ -87,11 +96,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white70 : Colors.black87;
+    final subtitleColor = isDark ? Colors.white60 : Colors.black54;
+    final dividerColor = isDark ? Colors.white12 : Colors.black12;
+    final cardColor =
+        isDark
+            ? Colors.deepPurple.withOpacity(0.1)
+            : Colors.deepPurple.withOpacity(0.05);
+
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
-        title: const Text('Profile', style: TextStyle(color: Colors.white)),
+        title: const Text('Profile'),
         centerTitle: true,
         foregroundColor: Colors.white,
       ),
@@ -110,9 +127,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 tag: 'profile-image-hero',
                 child: CircleAvatar(
                   radius: 60,
-                  backgroundImage: (profile != null && profile!.isNotEmpty)
-                      ? NetworkImage(profile!)
-                      : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
+                  backgroundImage:
+                      (profile != null && profile!.isNotEmpty)
+                          ? NetworkImage(profile!)
+                          : const AssetImage('assets/images/default_avatar.png')
+                              as ImageProvider,
                 ),
               ),
             ),
@@ -121,9 +140,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: Colors.deepPurple.withOpacity(0.05),
+              color: cardColor,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.deepPurple.withOpacity(0.2)),
+              border: Border.all(
+                color: Colors.deepPurple.withOpacity(isDark ? 0.3 : 0.2),
+              ),
               boxShadow: [
                 BoxShadow(
                   color: Colors.deepPurple.withOpacity(0.05),
@@ -134,11 +155,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             child: Column(
               children: [
-                _buildInfoRow(Icons.person, "Name", name ?? ''),
-                const Divider(color: Colors.black12),
-                _buildInfoRow(Icons.email, "Email", email ?? ''),
-                const Divider(color: Colors.black12),
-                _buildInfoRow(Icons.lock, "Password", "••••••••"),
+                _buildInfoRow(
+                  Icons.person,
+                  "Name",
+                  name ?? '',
+                  textColor,
+                  subtitleColor,
+                ),
+                Divider(color: dividerColor),
+                _buildInfoRow(
+                  Icons.email,
+                  "Email",
+                  email ?? '',
+                  textColor,
+                  subtitleColor,
+                ),
+                Divider(color: dividerColor),
+                _buildInfoRow(
+                  Icons.lock,
+                  "Password",
+                  "••••••••",
+                  textColor,
+                  subtitleColor,
+                ),
               ],
             ),
           ),
@@ -147,7 +186,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String title, String value) {
+  Widget _buildInfoRow(
+    IconData icon,
+    String title,
+    String value,
+    Color valueColor,
+    Color titleColor,
+  ) {
     return Row(
       children: [
         Icon(icon, color: Colors.deepPurple, size: 28),
@@ -156,18 +201,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title,
-                  style: const TextStyle(
-                    color: Colors.black54,
-                    fontSize: 14,
-                  )),
+              Text(title, style: TextStyle(color: titleColor, fontSize: 14)),
               const SizedBox(height: 4),
-              Text(value,
-                  style: const TextStyle(
-                    color: Colors.black87,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  )),
+              Text(
+                value,
+                style: TextStyle(
+                  color: valueColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ],
           ),
         ),

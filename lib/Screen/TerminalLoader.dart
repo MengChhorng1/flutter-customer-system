@@ -8,7 +8,8 @@ class TerminalLoader extends StatefulWidget {
   State<TerminalLoader> createState() => _TerminalLoaderState();
 }
 
-class _TerminalLoaderState extends State<TerminalLoader> with SingleTickerProviderStateMixin {
+class _TerminalLoaderState extends State<TerminalLoader>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Timer _timer;
   String _displayText = "";
@@ -60,16 +61,14 @@ class _TerminalLoaderState extends State<TerminalLoader> with SingleTickerProvid
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        width: 400,
-        height: 200,
+        width: 320,
+        height: 220,
         margin: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: const Color(0xFF1c1c1c),
           border: Border.all(color: Colors.white38),
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: const [
-            BoxShadow(color: Colors.black38, blurRadius: 15),
-          ],
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: const [BoxShadow(color: Colors.black38, blurRadius: 15)],
         ),
         child: Column(
           children: [
@@ -79,6 +78,10 @@ class _TerminalLoaderState extends State<TerminalLoader> with SingleTickerProvid
               padding: const EdgeInsets.symmetric(horizontal: 10),
               decoration: const BoxDecoration(
                 color: Color(0xFF343434),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
               ),
               child: Stack(
                 children: [
@@ -97,8 +100,11 @@ class _TerminalLoaderState extends State<TerminalLoader> with SingleTickerProvid
                   ),
                   const Center(
                     child: Text(
-                      'Status',
-                      style: TextStyle(color: Color(0xEEEEEEEEC1), fontSize: 16),
+                      'Customer System',
+                      style: TextStyle(
+                        color: Color(0xEEEEEEEEC1),
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ],
@@ -146,10 +152,7 @@ class _TerminalLoaderState extends State<TerminalLoader> with SingleTickerProvid
     return Container(
       width: 15,
       height: 15,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-      ),
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
     );
   }
 }

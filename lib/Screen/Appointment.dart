@@ -10,9 +10,9 @@ import 'Appointment/AppointmentDetailScreen.dart';
 
 class AppointmentScreen extends StatefulWidget {
   final Product? product;
-  final int? loginId;  // <-- NEW field for current login id
+  final int? loginId;
 
-  const AppointmentScreen({super.key, this.product, this.loginId});  // add loginId to constructor
+  const AppointmentScreen({super.key, this.product, this.loginId});
 
   @override
   State<AppointmentScreen> createState() => _AppointmentScreenState();
@@ -41,9 +41,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     try {
       final response = await http
           .get(
-        Uri.parse('http://10.0.2.2:8000/api/customers'),
-        headers: {'Accept': 'application/json'},
-      )
+            Uri.parse('http://10.0.2.2:8000/api/customers'),
+            headers: {'Accept': 'application/json'},
+          )
           .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
@@ -53,13 +53,11 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   .map((json) => Customer.fromJson(json))
                   .toList();
 
-          // New logic to select customer matching loginId
           if (widget.loginId != null) {
             final matchedCustomer = _customers.firstWhere(
-                  (c) => c.loginId == widget.loginId,
+              (c) => c.loginId == widget.loginId,
               orElse: () => _customers.first,
             );
-
 
             _selectedCustomerId = matchedCustomer.id;
           } else if (_customers.isNotEmpty) {
@@ -70,13 +68,13 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     } catch (e) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Error loading customers: $e')));
+      ).showSnackBar(SnackBar(content: Text('Error loading customers: \$e')));
     }
   }
 
-  // ... all other methods and build() unchanged ...
-
   Future<void> _selectDate(BuildContext context) async {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
@@ -85,14 +83,20 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: Colors.deepPurple,
-              onPrimary: Colors.white,
-              onSurface: Colors.black,
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(foregroundColor: Colors.deepPurple),
-            ),
+            colorScheme:
+                isDark
+                    ? const ColorScheme.dark(
+                      primary: Colors.deepPurple,
+                      onPrimary: Colors.white,
+                      surface: Colors.blueGrey,
+                      onSurface: Colors.white,
+                    )
+                    : const ColorScheme.light(
+                      primary: Colors.deepPurple,
+                      onPrimary: Colors.white,
+                      surface: Colors.white,
+                      onSurface: Colors.black,
+                    ),
           ),
           child: child!,
         );
@@ -104,17 +108,28 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   }
 
   Future<void> _selectTime(BuildContext context) async {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: _selectedTime,
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: Colors.deepPurple,
-              onPrimary: Colors.white,
-              onSurface: Colors.black,
-            ),
+            colorScheme:
+                isDark
+                    ? const ColorScheme.dark(
+                      primary: Colors.deepPurple,
+                      onPrimary: Colors.white,
+                      surface: Colors.blueGrey,
+                      onSurface: Colors.white,
+                    )
+                    : const ColorScheme.light(
+                      primary: Colors.deepPurple,
+                      onPrimary: Colors.white,
+                      surface: Colors.white,
+                      onSurface: Colors.black,
+                    ),
           ),
           child: child!,
         );
@@ -147,30 +162,11 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error booking appointment: $e'),
+            content: Text('Error booking appointment: \$e'),
             backgroundColor: Colors.red,
           ),
         );
       }
-    }
-  }
-
-  Future<void> _deleteAppointment(int id) async {
-    try {
-      await _appointmentService.deleteAppointment(id);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Appointment deleted successfully'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error deleting appointment: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
     }
   }
 
@@ -210,31 +206,31 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                         GestureDetector(
                           onTap:
                               () => _showImagePopup(
-                            context,
-                            widget.product!.imageUrl,
-                          ),
+                                context,
+                                widget.product!.imageUrl,
+                              ),
                           child: Hero(
-                            tag: 'product-image-${widget.product?.id}',
+                            tag: 'product-image-\${widget.product?.id}',
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child:
-                              widget.product!.imageUrl != null
-                                  ? Image.network(
-                                widget.product!.imageUrl!,
-                                height: 120,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                                errorBuilder:
-                                    (context, error, stackTrace) =>
-                                const Icon(
-                                  Icons.broken_image,
-                                  size: 60,
-                                ),
-                              )
-                                  : const Icon(
-                                Icons.shopping_cart,
-                                size: 60,
-                              ),
+                                  widget.product!.imageUrl != null
+                                      ? Image.network(
+                                        widget.product!.imageUrl!,
+                                        height: 120,
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                                const Icon(
+                                                  Icons.broken_image,
+                                                  size: 60,
+                                                ),
+                                      )
+                                      : const Icon(
+                                        Icons.shopping_cart,
+                                        size: 60,
+                                      ),
                             ),
                           ),
                         ),
@@ -263,7 +259,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
               ],
               if (_customers.isNotEmpty)
                 Card(
-                  color: Colors.grey[100],
                   elevation: 2,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -283,10 +278,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   ),
                 ),
               const SizedBox(height: 16),
-
               TextFormField(
                 controller: _serviceTypeController,
-                readOnly: true, // This makes the field non-editable
+                readOnly: true,
                 decoration: InputDecoration(
                   labelText: 'Service Type',
                   border: OutlineInputBorder(
@@ -297,7 +291,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                 validator:
                     (value) => value?.isEmpty ?? true ? 'Required' : null,
               ),
-
               const SizedBox(height: 16),
               Row(
                 children: [
@@ -312,7 +305,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                         prefixIcon: const Icon(Icons.calendar_today),
                       ),
                       controller: TextEditingController(
-                        text: DateFormat('MMM dd, yyyy').format(_selectedDate),
+                        text: DateFormat('dd MMM, yyyy').format(_selectedDate),
                       ),
                       onTap: () => _selectDate(context),
                     ),
@@ -373,50 +366,50 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
         opaque: false,
         pageBuilder:
             (context, _, __) => Scaffold(
-          backgroundColor: Colors.black.withOpacity(0.9),
-          body: SafeArea(
-            child: Stack(
-              children: [
-                Center(
-                  child: InteractiveViewer(
-                    panEnabled: true,
-                    minScale: 0.5,
-                    maxScale: 4.0,
-                    child: Hero(
-                      tag: 'product-image-${widget.product?.id}',
-                      child: Image.network(
-                        imageUrl,
-                        errorBuilder:
-                            (context, error, stackTrace) => Container(
-                          color: Colors.grey[200],
-                          child: const Center(
-                            child: Icon(
-                              Icons.broken_image,
-                              size: 50,
-                              color: Colors.white,
-                            ),
+              backgroundColor: Colors.black.withOpacity(0.9),
+              body: SafeArea(
+                child: Stack(
+                  children: [
+                    Center(
+                      child: InteractiveViewer(
+                        panEnabled: true,
+                        minScale: 0.5,
+                        maxScale: 4.0,
+                        child: Hero(
+                          tag: 'product-image-\${widget.product?.id}',
+                          child: Image.network(
+                            imageUrl,
+                            errorBuilder:
+                                (context, error, stackTrace) => Container(
+                                  color: Colors.grey[200],
+                                  child: const Center(
+                                    child: Icon(
+                                      Icons.broken_image,
+                                      size: 50,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                Positioned(
-                  top: 20,
-                  right: 20,
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.close,
-                      color: Colors.white,
-                      size: 30,
+                    Positioned(
+                      top: 20,
+                      right: 20,
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                      ),
                     ),
-                    onPressed: () => Navigator.pop(context),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
       ),
     );
   }

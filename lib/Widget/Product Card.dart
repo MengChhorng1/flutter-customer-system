@@ -34,12 +34,17 @@ class ProductCard extends StatelessWidget {
                         tag: 'product-image-${product.id}',
                         child: Image.network(
                           product.imageUrl!,
-                          errorBuilder: (context, error, stackTrace) => Container(
-                            color: Colors.grey[200],
-                            child: const Center(
-                              child: Icon(Icons.broken_image, size: 50, color: Colors.white),
-                            ),
-                          ),
+                          errorBuilder:
+                              (context, error, stackTrace) => Container(
+                                color: Colors.grey[200],
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.broken_image,
+                                    size: 50,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
                         ),
                       ),
                     ),
@@ -48,7 +53,11 @@ class ProductCard extends StatelessWidget {
                     top: 20,
                     right: 20,
                     child: IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                        size: 30,
+                      ),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                   ),
@@ -65,9 +74,7 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -78,20 +85,27 @@ class ProductCard extends StatelessWidget {
               child: Hero(
                 tag: 'product-image-${product.id}',
                 child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
-                  child: product.imageUrl != null
-                      ? Image.network(
-                    product.imageUrl!,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      color: Colors.grey[200],
-                      child: const Icon(Icons.broken_image, size: 50),
-                    ),
-                  )
-                      : Container(
-                    color: Colors.grey[200],
-                    child: const Icon(Icons.image, size: 50),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(15),
                   ),
+                  child:
+                      product.imageUrl != null
+                          ? Image.network(
+                            product.imageUrl!,
+                            fit: BoxFit.cover,
+                            errorBuilder:
+                                (context, error, stackTrace) => Container(
+                                  color: Colors.grey[200],
+                                  child: const Icon(
+                                    Icons.broken_image,
+                                    size: 50,
+                                  ),
+                                ),
+                          )
+                          : Container(
+                            color: Colors.grey[200],
+                            child: const Icon(Icons.image, size: 50),
+                          ),
                 ),
               ),
             ),
@@ -125,10 +139,7 @@ class ProductCard extends StatelessWidget {
                 // ✅ NEW STOCK LINE
                 Text(
                   'Stock: ${product.stock}+', // <-- make sure stock is in your model
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
+                  style: const TextStyle(fontSize: 14, color: Colors.grey),
                 ),
 
                 const SizedBox(height: 12),
@@ -142,25 +153,28 @@ class ProductCard extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        padding: const EdgeInsets.symmetric(horizontal: 0),
                       ),
                       child: const Text(
                         'Order',
                         style: TextStyle(fontSize: 12, color: Colors.white),
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: onAppointmentPressed,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                    const SizedBox(width: 5),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: onAppointmentPressed,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 0),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                      ),
-                      child: const Text(
-                        'Appointment',
-                        style: TextStyle(fontSize: 12, color: Colors.white),
+                        child: const Text(
+                          'Appointment',
+                          style: TextStyle(fontSize: 12, color: Colors.white),
+                        ),
                       ),
                     ),
                   ],
